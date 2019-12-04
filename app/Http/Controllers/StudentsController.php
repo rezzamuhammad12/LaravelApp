@@ -15,7 +15,8 @@ class StudentsController extends Controller
     public function index()
     {
         $students = Student::all();
-        return view('students/index', ['students' => $students]);
+        // return view('students/index', ['students' => $students]);
+        return view('students.index', compact('students'));
     }
 
     /**
@@ -24,7 +25,9 @@ class StudentsController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create()
-    { }
+    {
+        return view('students.create');
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -34,7 +37,35 @@ class StudentsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        //Menambahkan data dengan function store
+        // $student = new Student;
+        // $student->nama = $request->nama;
+        // $student->nrp = $request->nrp;
+        // $student->email = $request->email;
+        // $student->jurusan = $request->jurusan;
+
+        // $student->save();
+
+        // Menambahkan data dengan array asosiative
+        // Student::create([
+        //     'nama' => $request->nama,
+        //     'nrp' => $request->nrp,
+        //     'email' => $request->email,
+        //     'jurusan' => $request->jurusan
+        // ]);
+
+
+        $request->validate([
+            'nama' => 'required',
+            'nrp' => 'required|size:9',
+            'email' => 'required',
+            'jurusan' => 'required'
+        ]);
+
+        // Mengambil data di atribut fillabel
+        Student::create($request->all());
+
+        return redirect('/students')->with('status', 'Data Mahasiswa Berhasil Ditambahkan!');
     }
 
     /**
@@ -45,7 +76,7 @@ class StudentsController extends Controller
      */
     public function show(Student $student)
     {
-        return view('students/show', ['student' => $student]);
+        return view('students.show', compact('student'));
     }
 
     /**
